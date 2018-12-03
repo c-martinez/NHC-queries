@@ -17,8 +17,8 @@ SELECT DISTINCT ?label ?page ?year  WHERE {
   ?event nhc:verbatimEventDate ?date .
   ?date rdfs:label ?label .
   ?event dwc:year ?year .
-  FILTER (?year >= ?_startYear_number).
-  FILTER (?year <= ?_endYear_number) .
+  FILTER (?year >= ?_startYear).
+  FILTER (?year <= ?_endYear) .
   ?event dsw:eventOf ?occurrence .
   ?occurrence dsw:hasEvidence ?observationRecord .
   ?anno oa:hasBody ?observationRecord .
