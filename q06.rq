@@ -1,0 +1,27 @@
+#+ summary:
+#+   Provide me with a list of anatomical entities on which the classification of the genus 'Pteropus' was based in the field books
+#+ tags:
+#+   - Q-06
+#+ endpoint: http://makingsense.liacs.nl/rdf4j-server/repositories/NC
+#+ endpoint_in_url: False
+#+ defaults:
+#+   - genus: "Pteropus"
+
+PREFIX dwciri: <http://rs.tdwg.org/dwc/iri/>
+PREFIX dsw: <http://purl.org/dsw/>
+PREFIX uberon: <http://purl.obolibrary.org/obo/>
+PREFIX ncit: <http://identifiers.org/ncit/>
+PREFIX nhc: <http://makingsense.liacs.nl/rdf/nhc/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT DISTINCT ?label2 ?uberonClass WHERE {
+  ?identification dwciri:toTaxon ?taxon .
+  ?taxon rdfs:label ?label
+  FILTER regex(?label, ?_genus)
+  ?identification dsw:isBasedOn ?token .
+  ?token dsw:hasDerivative ?measurement .
+  ?measurement nhc:measuresOrDescribes ?anatomicalentity .
+  ?anatomicalentity rdfs:label ?label2 .
+  ?anatomicalentity rdf:type ?uberonClass .
+  ?uberonClass rdfs:subClassOf uberon:UBERON_0001062
+}

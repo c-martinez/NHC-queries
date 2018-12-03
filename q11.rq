@@ -1,0 +1,21 @@
+#+ summary:
+#+   Show me all resources (lists, drawings and observations) concerning a specific species, e.g. “Pteropus”
+#+ tags:
+#+   - Q-11
+#+ endpoint: http://makingsense.liacs.nl/rdf4j-server/repositories/NC
+#+ endpoint_in_url: False
+#+ defaults:
+#+   - species: Pteropus
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX oa: <http://www.w3.org/ns/oa#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT DISTINCT ?page ?type WHERE {
+  ?anno oa:hasTarget ?roi .
+  ?roi oa:hasSource ?page .
+  ?anno oa:hasBody ?textualbody .
+  ?textualbody rdf:type oa:TextualTag .
+  ?textualbody rdfs:label ?label
+  FILTER regex(str(?label), ?_species, "i")
+  ?page rdf:type ?type
+}

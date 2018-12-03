@@ -1,0 +1,18 @@
+#+ summary:
+#+   Are the species named directly in the field or do they receive a number or temporary name?
+#+ tags:
+#+   - Q-12
+#+ endpoint: http://makingsense.liacs.nl/rdf4j-server/repositories/NC
+#+ endpoint_in_url: False
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX oa: <http://www.w3.org/ns/oa#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dwc: <http://rs.tdwg.org/dwc/terms/>
+SELECT DISTINCT ?page ?label WHERE {
+  ?anno oa:hasTarget ?roi .
+  ?roi oa:hasSource ?page .
+  ?anno oa:hasBody ?body .
+  ?body rdfs:label ?label .
+  ?body rdf:type dwc:Taxon
+}

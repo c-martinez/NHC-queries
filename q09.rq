@@ -1,0 +1,39 @@
+#+ summary:
+#+   Which Chiroptera species were collected by person X on java?
+#+ tags:
+#+   - Q-09
+#+ endpoint: http://makingsense.liacs.nl/rdf4j-server/repositories/NC
+#+ endpoint_in_url: False
+#+ defaults:
+#+   - orderName: Chiropterae
+#+   - location: Java
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX nhc: <http://makingsense.liacs.nl/rdf/nhc/>
+PREFIX nc: <http://makingsense.liacs.nl/rdf/nc#>
+PREFIX dwc: <http://rs.tdwg.org/dwc/>
+PREFIX dwciri: <http://rs.tdwg.org/dwc/iri/>
+PREFIX dsw: <http://purl.org/dsw/>
+PREFIX viaf: <http://viaf.org/viaf/>
+PREFIX oa: <http://www.w3.org/ns/oa#>
+PREFIX gn: <http://www.geonames.org/ontology#>
+SELECT DISTINCT ?label ?page WHERE {
+  ?taxon rdfs:label ?label .
+  ?taxon nhc:taxonRank nc:species .
+  ?taxon nhc:belongsToTaxon  ?order .
+  ?order rdfs:label ?oName .
+  FILTER regex(?oName, ?_orderName) .
+  ?identification dwciri:toTaxon ?taxon .
+  ?organism dsw:hasIdentification ?identification .
+  ?occurrence dsw:occurrenceOf ?organism .
+  ?occurrence dwciri:recordedBy viaf:45106482 .
+  ?occurrence dsw:atEvent ?event .
+  ?event dsw:locatedAt ?location .
+  ?location dwciri:inDescribedPlace ?place .
+  ?place gn:parentFeature ?parent .
+  ?parent gn:alternateName ?name
+  FILTER regex(str(?name), ?_location, "i")
+  ?anno oa:hasTarget ?roi .
+  ?roi oa:hasSource ?page .
+  ?anno oa:hasBody ?taxon
+}

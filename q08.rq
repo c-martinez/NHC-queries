@@ -1,0 +1,24 @@
+#+ summary:
+#+   Provide me with a list of all taxonomical names that occur in the fieldbook, the naturalist who recorded them, the author who published/was going to publish the name and the page on which their occurrence is described.
+#+ tags:
+#+   - Q-08
+#+ endpoint: http://makingsense.liacs.nl/rdf4j-server/repositories/NC
+#+ endpoint_in_url: False
+
+PREFIX dwciri: <http://rs.tdwg.org/dwc/iri/>
+PREFIX dsw: <http://purl.org/dsw/>
+PREFIX nhc: <http://makingsense.liacs.nl/rdf/nhc/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dwc: <http://rs.tdwg.org/dwc/terms/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX oa: <http://www.w3.org/ns/oa#>
+SELECT DISTINCT ?naturalist ?taxon ?label ?authorOfTaxon ?page WHERE {
+  ?taxon rdf:type dwc:Taxon .
+  ?taxon rdfs:label ?label .
+  ?taxon nhc:scientificNameAuthorship ?authorOfTaxon .
+  ?identification dwciri:toTaxon ?taxon .
+  ?identification dwciri:identifiedBy ?naturalist .
+  ?observation dsw:isBasisForId ?identification .
+  ?annotation oa:hasBody ?observation .
+  ?annotation oa:hasTarget ?page
+}

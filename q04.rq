@@ -1,0 +1,26 @@
+#+ summary:
+#+   Show me all pages with descriptions of species occurrences that were recorded between 1820 and 1821
+#+ tags:
+#+   - Q-04
+#+ endpoint: http://makingsense.liacs.nl/rdf4j-server/repositories/NC
+#+ endpoint_in_url: False
+#+ defaults:
+#+   - startYear: 1820
+#+   - endYear: 1821
+
+PREFIX nhc: <http://makingsense.liacs.nl/rdf/nhc/>
+PREFIX dwc: <http://rs.tdwg.org/dwc/terms/>
+PREFIX dsw: <http://purl.org/dsw/>
+PREFIX oa: <http://www.w3.org/ns/oa#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT DISTINCT ?label ?page ?year  WHERE {
+  ?event nhc:verbatimEventDate ?date .
+  ?date rdfs:label ?label .
+  ?event dwc:year ?year .
+  FILTER (?year >= ?_startYear_number).
+  FILTER (?year <= ?_endYear_number) .
+  ?event dsw:eventOf ?occurrence .
+  ?occurrence dsw:hasEvidence ?observationRecord .
+  ?anno oa:hasBody ?observationRecord .
+  ?anno oa:hasTarget ?page
+}
